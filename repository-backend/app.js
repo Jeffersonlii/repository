@@ -17,7 +17,15 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+//CORS
+const cors = require('cors');
+app.use(
+    cors({
+        origin: process.env.PROD ? 'http://localhost' : 'http://localhost:3000',
+        methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+        credentials: true,
+    })
+);
 //db
 let Datastore = require('nedb'),
     images = new Datastore({
@@ -184,10 +192,10 @@ app.delete('/api/image/:id', isAuthenticated, function (req, res, next) {
         }
     });
 });
-const https = require('https');
-const PORT = 3000;
+const http = require('http');
+const PORT = 3001;
 
-https.createServer(app).listen(PORT, function (err) {
+http.createServer(app).listen(PORT, function (err) {
     if (err) console.log(err);
-    else console.log('HTTP server on https://localhost:%s', PORT);
+    else console.log('HTTP server on http://localhost:%s', PORT);
 });
