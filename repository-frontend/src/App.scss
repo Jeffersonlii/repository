@@ -1,0 +1,13 @@
+.App {
+    width: 100vw;
+    height: 100vh;
+    background-color: blanchedalmond;
+}
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
+#global-logo {
+    font-size: 4rem;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-family: 'Playfair Display', serif;
+}
