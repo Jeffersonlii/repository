@@ -39,7 +39,6 @@ function ProtectedRoute({ Component, logout, ...other }) {
     useEffect(() => {
         const getAuth = async () => {
             const resp = await checkAuthenticated();
-            console.log(resp);
             setAuth({
                 auth: resp.data.userid !== undefined,
                 ready: true,

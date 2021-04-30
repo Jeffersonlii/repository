@@ -99,7 +99,7 @@ app.post('/api/login/', function (req, res, next) {
 
 app.get('/api/logoff/', function (req, res, next) {
     req.session.userid = undefined;
-    res.redirect('/');
+    return res.status(200).send({ success: true });
 });
 
 app.get('/api/getSessionId/', function (req, res, next) {

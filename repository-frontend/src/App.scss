@@ -14,3 +14,18 @@
     left: 1rem;
     font-family: 'Playfair Display', serif;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border: 1px solid white;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: black;
+}

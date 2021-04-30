@@ -16,7 +16,14 @@ export const loginUser = ({ username, password }) => {
         }
     );
 };
-
+export const logoutUser = () => {
+    return axios.get(`${url}/logoff/`, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        withCredentials: true, //! must set this to interact with session
+    });
+};
 export const registerUser = ({ username, password }) => {
     return axios.post(
         `${url}/register/`,

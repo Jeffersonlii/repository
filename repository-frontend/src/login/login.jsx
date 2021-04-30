@@ -9,7 +9,7 @@ function Login() {
     const history = useHistory();
 
     return (
-        <div className="host">
+        <div className="login-host">
             <div id="global-logo">Repository</div>
             <Formik
                 initialValues={{
