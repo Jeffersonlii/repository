@@ -7,7 +7,7 @@ import {
     Route,
     Redirect,
 } from 'react-router-dom';
-import { Spinner } from 'baseui/spinner';
+import { StyledSpinnerNext } from 'baseui/spinner';
 
 import Login from './login/login';
 import Dashboard from './dashboard/dashboard';
@@ -66,7 +66,7 @@ function ProtectedRoute({ Component, logout, ...other }) {
             }}
         />
     ) : (
-        <Spinner size={96} />
+        <StyledSpinnerNext size={96} />
     );
 }
 export default App;

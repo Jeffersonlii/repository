@@ -37,7 +37,6 @@ function UploadModal(props) {
                         multiple
                         errorMessage={errorMessage}
                         onDrop={(files) => {
-                            console.log(files);
                             setFilesToUpload(files);
                         }}
                         onDropRejected={(files) => {

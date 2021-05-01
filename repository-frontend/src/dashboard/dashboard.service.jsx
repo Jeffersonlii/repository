@@ -13,6 +13,15 @@ export const uploadImages = (images) => {
         withCredentials: true, //! must set this to interact with session
     });
 };
+export const deleteImage = (image) => {
+    return axios.delete(`${url}/image/${image._id}`, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        withCredentials: true, //! must set this to interact with session
+    });
+};
+
 export const getImageIds = (images) => {
     return axios.get(`${url}/image/`, {
         withCredentials: true, //! must set this to interact with session

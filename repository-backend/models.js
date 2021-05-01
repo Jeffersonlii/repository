@@ -31,5 +31,15 @@ class User {
     }
 }
 
+class ShareLink {
+    constructor({ imageid, creatorid, limits: { temporal, visits } }) {
+        this.imageid = imageid;
+        this.creatorid = creatorid;
+        this.limits = { temporal, visits };
+        this.state = { visits: 0 };
+    }
+}
+
 exports.Image = Image;
 exports.User = User;
+exports.ShareLink = ShareLink;

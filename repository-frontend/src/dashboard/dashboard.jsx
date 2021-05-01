@@ -2,8 +2,8 @@ import './dashboard.scss';
 import './masonry.scss';
 
 import { Button } from 'baseui/button';
-import Upload from 'baseui/icon/upload';
-import ArrowLeft from 'baseui/icon/arrow-left';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { logoutUser } from '../login/login.service';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -11,7 +11,7 @@ import UploadModal from './uploadModal/uploadModal';
 import { getImageIds, getImageURL } from './dashboard.service';
 import Masonry from 'react-masonry-css';
 import { Pagination } from 'baseui/pagination';
-import { Spinner } from 'baseui/spinner';
+import { StyledSpinnerNext } from 'baseui/spinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
 function Dashboard() {
     const query = new URLSearchParams(useLocation().search);
@@ -30,6 +30,8 @@ function Dashboard() {
     const history = useHistory();
 
     let refreshGallery = () => {
+        setGalleryImages([]);
+        setImagesLoaded(0);
         getImageIds().then((resp) => {
             setGalleryImages(resp.data.images);
         });
@@ -48,14 +50,14 @@ function Dashboard() {
                         });
                     }}
                 >
-                    <ArrowLeft />
+                    <ExitToAppIcon />
                 </Button>
                 <Button
                     onClick={() => {
                         setIsUploadOpen(true);
                     }}
                 >
-                    <Upload />
+                    <CloudUploadIcon />
                 </Button>
                 <Button
                     onClick={() => {
@@ -72,10 +74,9 @@ function Dashboard() {
             <div id="gallery">
                 <Masonry
                     breakpointCols={{
-                        default: 4,
-                        1100: 3,
-                        700: 2,
-                        500: 1,
+                        default: 3,
+                        1100: 2,
+                        700: 1,
                     }}
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
@@ -110,7 +111,7 @@ function Dashboard() {
                     Math.min(currentPage * pageSize, galleryImages.length) -
                         (currentPage - 1) * pageSize && (
                     <div id="loading-facade">
-                        <Spinner size={96} />
+                        <StyledSpinnerNext size={96} />
                     </div>
                 )}
             </div>
@@ -119,7 +120,6 @@ function Dashboard() {
                     numPages={numPages}
                     currentPage={currentPage}
                     onPageChange={({ nextPage, prevPage }) => {
-                        console.log(nextPage, prevPage);
                         let newpage = Math.min(Math.max(nextPage, 1), numPages);
                         history.push(`/dashboard?page=${newpage}`);
 
@@ -134,7 +134,7 @@ function Dashboard() {
                 isOpen={isUploadOpen}
                 setIsOpen={setIsUploadOpen}
                 onFinishedUpload={refreshGallery}
-            ></UploadModal>
+            />
         </div>
     );
 }

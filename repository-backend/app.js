@@ -22,19 +22,23 @@ const cors = require('cors');
 app.use(
     cors({
         origin: process.env.PROD ? 'http://localhost' : 'http://localhost:3000',
-        methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+        methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
         credentials: true,
     })
 );
 //db
 let Datastore = require('nedb'),
-    images = new Datastore({
+    Images = new Datastore({
         filename: 'db/images.db',
         autoload: true,
         timestampData: true,
     }),
     Users = new Datastore({
         filename: 'db/users.db',
+        autoload: true,
+    }),
+    Sharelink = new Datastore({
+        filename: 'db/sharelinks.db',
         autoload: true,
     });
 
@@ -116,7 +120,7 @@ app.post(
     function (req, res, next) {
         Users.findOne({ _id: req.userid }, (e, p) => {
             req.files.forEach((file) => {
-                images.insert(
+                Images.insert(
                     new models.Image({
                         path: file.path,
                         mimetype: file.mimetype,
@@ -136,8 +140,7 @@ app.post(
 //get all images ids for the logged in user
 app.get('/api/image/', isAuthenticated, function (req, res, next) {
     let owner = req.userid;
-    images
-        .find({ uploaderid: owner })
+    Images.find({ uploaderid: owner })
         .sort({ createdAt: 1 })
         .projection({ path: -1, mimetype: -1, updatedAt: -1 })
         .exec(function (err, data) {
@@ -152,9 +155,13 @@ app.get('/api/image/', isAuthenticated, function (req, res, next) {
 });
 //get 1 image by image id
 app.get('/api/image/:id', isAuthenticated, function (req, res, next) {
-    images.findOne({ _id: req.params.id }, (e, p) => {
+    Images.findOne({ _id: req.params.id }, (e, p) => {
         if (p === null) {
             res.status(404).end('image: ' + req.params.id + ' does not exists');
+        } else if (p.uploaderid !== req.userid) {
+            res.status(401).end(
+                'image: ' + req.params.id + ' does not belong to requester'
+            );
         } else {
             res.setHeader('Content-Type', p.mimetype);
             res.sendFile(p.path, { root: __dirname });
@@ -163,7 +170,7 @@ app.get('/api/image/:id', isAuthenticated, function (req, res, next) {
 });
 //delete 1 image by image id
 app.delete('/api/image/:id', isAuthenticated, function (req, res, next) {
-    images.findOne({ _id: req.params.id }, (e, p) => {
+    Images.findOne({ _id: req.params.id }, (e, p) => {
         if (p === null) {
             return res
                 .status(404)
@@ -171,7 +178,7 @@ app.delete('/api/image/:id', isAuthenticated, function (req, res, next) {
         } else if (p.uploaderid !== req.userid) {
             return res.status(401).end('access denied');
         } else {
-            images.remove({ _id: req.params.id }, {}, (e) => {
+            Images.remove({ _id: req.params.id }, {}, (e) => {
                 if (!e) {
                     fs.unlink(`${__dirname}/${p.path}`, (err) => {
                         if (err) {
@@ -189,6 +196,40 @@ app.delete('/api/image/:id', isAuthenticated, function (req, res, next) {
         }
     });
 });
+
+/////////////////////////////////// SHARELINKS //////////////////////////////////////
+//create link
+app.post('/api/share/:id', isAuthenticated, function (req, res, next) {
+    Images.findOne({ _id: req.params.id }, (e, p) => {
+        if (!p) {
+            return res
+                .status(404)
+                .end('image: ' + req.params.id + ' does not exists');
+        }
+        if (p.uploaderid !== req.userid) {
+            return res.status(401).end('access denied');
+        }
+        console.log(req.body);
+        let temporal = req.body.limits.temporal;
+        let visits = req.body.limits.temporal;
+
+        Sharelink.insert(
+            new models.ShareLink({
+                imageid: p._id,
+                creatorid: req.userid,
+                limits: { temporal, visits },
+            }),
+            (e, p) => {
+                if (e) {
+                    return res.status(409).end('Something went wrong');
+                } else {
+                    return res.status(201).send(p);
+                }
+            }
+        );
+    });
+});
+
 const http = require('http');
 const PORT = 3001;
 
