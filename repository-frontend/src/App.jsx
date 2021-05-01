@@ -12,6 +12,7 @@ import { Spinner } from 'baseui/spinner';
 import Login from './login/login';
 import Dashboard from './dashboard/dashboard';
 import { checkAuthenticated } from './login/login.service';
+
 function App() {
     return (
         <div className="App">

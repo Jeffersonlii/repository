@@ -108,35 +108,34 @@ app.get('/api/getSessionId/', function (req, res, next) {
 
 /////////////////////////////////// IMAGES //////////////////////////////////////
 
-//add one image
+//add multiple images
 app.post(
     '/api/image/',
     isAuthenticated,
-    upload.single('file'),
+    upload.array('file'),
     function (req, res, next) {
         Users.findOne({ _id: req.userid }, (e, p) => {
-            images.insert(
-                new models.Image({
-                    path: req.file.path,
-                    mimetype: req.file.mimetype,
-                    title: req.body.title,
-                    author: p.username,
-                    uploaderid: req.userid,
-                }),
-                (e, p) => {
-                    if (e) {
-                        return res.status(409).end('Something went wrong');
-                    } else {
-                        return res.status(201).send(p);
+            req.files.forEach((file) => {
+                images.insert(
+                    new models.Image({
+                        path: file.path,
+                        mimetype: file.mimetype,
+                        uploaderid: req.userid,
+                    }),
+                    (e, p) => {
+                        if (e) {
+                            return res.status(409).end('Something went wrong');
+                        }
                     }
-                }
-            );
+                );
+            });
+            return res.status(201).send(p);
         });
     }
 );
-//get all images ids for a given user, if no user is given, use requester
+//get all images ids for the logged in user
 app.get('/api/image/', isAuthenticated, function (req, res, next) {
-    let owner = req.query.userid ? req.query.userid : req.userid;
+    let owner = req.userid;
     images
         .find({ uploaderid: owner })
         .sort({ createdAt: 1 })
@@ -146,9 +145,7 @@ app.get('/api/image/', isAuthenticated, function (req, res, next) {
                 res.status(400).json('Something went Wrong.');
             } else {
                 res.json({
-                    images: data,
-                    owner,
-                    self: owner === req.userid,
+                    images: data.reverse(),
                 });
             }
         });

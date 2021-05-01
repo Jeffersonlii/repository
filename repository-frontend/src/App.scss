@@ -1,7 +1,7 @@
 .App {
     width: 100vw;
     height: 100vh;
-    background-color: blanchedalmond;
+    // background-color: blanchedalmond;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,12 +20,8 @@
     width: 10px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-    border: 1px solid white;
-}
-
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: black;
+    border-left: 1px solid white;
 }

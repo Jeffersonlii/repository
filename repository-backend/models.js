@@ -1,11 +1,9 @@
 /*jshint esversion: 6 */
 
 class Image {
-    constructor({ path, mimetype, title, author, uploaderid }) {
+    constructor({ path, mimetype, uploaderid }) {
         this.path = path;
         this.mimetype = mimetype;
-        this.title = title;
-        this.author = author;
         this.uploaderid = uploaderid;
     }
 }

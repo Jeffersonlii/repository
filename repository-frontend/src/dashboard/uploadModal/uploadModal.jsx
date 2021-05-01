@@ -13,6 +13,7 @@ import {
 } from 'baseui/modal';
 import { KIND as ButtonKind } from 'baseui/button';
 import { ThemeProvider, createTheme, lightThemePrimitives } from 'baseui';
+import { uploadImages } from '../dashboard.service';
 function UploadModal(props) {
     const [errorMessage, setErrorMessage] = useState('');
     const [filesToUpload, setFilesToUpload] = useState([]);
@@ -86,7 +87,15 @@ function UploadModal(props) {
                 >
                     Cancel
                 </ModalButton>
-                <ModalButton disabled={filesToUpload.length === 0}>
+                <ModalButton
+                    disabled={filesToUpload.length === 0}
+                    onClick={() => {
+                        uploadImages(filesToUpload).then(() => {
+                            props.onFinishedUpload();
+                            props.openState.setIsOpen(false);
+                        });
+                    }}
+                >
                     Add
                 </ModalButton>
             </ModalFooter>
