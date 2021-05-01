@@ -39,8 +39,6 @@ function Login() {
                             break;
                         default:
                     }
-
-                    console.log(values);
                     setTimeout(() => {
                         setSubmitting(false);
                     }, 400);

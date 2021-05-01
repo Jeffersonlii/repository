@@ -8,14 +8,19 @@
         // background-color: black;
         display: flex;
         justify-content: flex-start;
-        position: sticky;
+        position: relative;
         top: 0;
-        margin: 1rem;
+        padding: 1rem;
+        #global-logo {
+            position: absolute;
+            left: 6rem;
+            top: -40px;
+        }
     }
     #gallery {
         position: relative;
         height: 100%;
-
+        overflow-x: hidden;
         overflow-y: auto;
         .image {
             width: 100%;

@@ -65,6 +65,10 @@ function Dashboard() {
                     openState={{ isOpen, setIsOpen }}
                     onFinishedUpload={refreshGallery}
                 ></UploadModal>
+                <div style={{ 'flex-grow': 999 }}></div>
+                <div>
+                    <div id="global-logo">Repository</div>
+                </div>
             </header>
             <div id="gallery">
                 <Masonry
@@ -96,7 +100,7 @@ function Dashboard() {
                             );
                         })}
                 </Masonry>
-                {imagesLoaded !==
+                {imagesLoaded <
                     Math.min(currentPage * pageSize, galleryImages.length) -
                         (currentPage - 1) * pageSize && (
                     <div id="loading-facade">
