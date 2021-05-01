@@ -75,13 +75,14 @@ function NoLimitLink(props) {
 }
 function VisitsLimitLink(props) {
     const [link, setLink] = useState('');
-    const initVisits = 100;
+    const initVisits = 5;
     const [maxVisits, setMaxVisits] = useState(initVisits);
 
     let onChange = (visits) => {
+        setLink('');
         setMaxVisits(visits);
 
-        createLink(props.imageid, { maxVisits }).then((link) => {
+        createLink(props.imageid, { maxVisits: visits }).then((link) => {
             setLink(`${window.location.origin}/share/${link.data._id}`);
         });
     };
@@ -109,25 +110,35 @@ function TimeLimitLink(props) {
     const [expDate, setExpDate] = useState([new Date()]);
 
     let onChange = (value, mode) => {
+        setLink('');
+        let combinedTemporal;
         //mode = time | date
         switch (mode) {
             case 'time':
                 setExpTime(value);
+                combinedTemporal = new Date(
+                    expDate[0].getFullYear(),
+                    expDate[0].getMonth(),
+                    expDate[0].getDate(),
+                    value.getHours(),
+                    value.getMinutes(),
+                    value.getSeconds()
+                );
                 break;
             case 'date':
                 setExpDate(Array.isArray(value) ? value : [value]);
+
+                combinedTemporal = new Date(
+                    value.getFullYear(),
+                    value.getMonth(),
+                    value.getDate(),
+                    expTime.getHours(),
+                    expTime.getMinutes(),
+                    expTime.getSeconds()
+                );
                 break;
             default:
         }
-
-        let combinedTemporal = new Date(
-            expDate[0].getFullYear(),
-            expDate[0].getMonth(),
-            expDate[0].getDate(),
-            expTime.getHours(),
-            expTime.getMinutes(),
-            expTime.getSeconds()
-        );
         createLink(props.imageid, { expTime: combinedTemporal }).then(
             (link) => {
                 setLink(`${window.location.origin}/share/${link.data._id}`);

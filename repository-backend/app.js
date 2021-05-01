@@ -209,9 +209,8 @@ app.post('/api/share/:id', isAuthenticated, function (req, res, next) {
         if (p.uploaderid !== req.userid) {
             return res.status(401).end('access denied');
         }
-        console.log(req.body);
         let temporal = req.body.limits.temporal;
-        let visits = req.body.limits.temporal;
+        let visits = req.body.limits.visits;
 
         Sharelink.insert(
             new models.ShareLink({
@@ -229,7 +228,42 @@ app.post('/api/share/:id', isAuthenticated, function (req, res, next) {
         );
     });
 });
+app.get('/api/share/:id', function (req, res, next) {
+    Sharelink.findOne({ _id: req.params.id }, (e, p) => {
+        console.log(p);
 
+        if (e) {
+            return res.status(409).end('Something went wrong');
+        }
+        let maxVisits = p.limits.visits;
+        if (maxVisits) {
+            if (p.visits > maxVisits) {
+                return res.status(401).end('Link is invalid/expired');
+            }
+        }
+        let temporalLimit = p.limits.temporal;
+        if (temporalLimit) {
+            console.log(new Date() > new Date(temporalLimit));
+            if (new Date() > new Date(temporalLimit)) {
+                return res.status(401).end('Link is invalid/expired');
+            }
+        }
+
+        //increment visits state
+        Sharelink.update({ _id: req.params.id }, { $inc: { visits: 1 } });
+
+        Images.findOne({ _id: p.imageid }, (e, image) => {
+            if (image === null) {
+                res.status(404).end(
+                    'image: ' + req.params.id + ' does not exists'
+                );
+            } else {
+                res.setHeader('Content-Type', image.mimetype);
+                res.sendFile(image.path, { root: __dirname });
+            }
+        });
+    });
+});
 const http = require('http');
 const PORT = 3001;
 

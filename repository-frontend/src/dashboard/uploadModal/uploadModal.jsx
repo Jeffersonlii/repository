@@ -33,7 +33,7 @@ function UploadModal(props) {
                 <div id="modal-parent">
                     <FileUploader
                         accept=".png, .jpg, .jpeg"
-                        maxSize={209715200} //max image size is 200 mb
+                        maxSize={20971520} //max image size is 20 mb
                         multiple
                         errorMessage={errorMessage}
                         onDrop={(files) => {

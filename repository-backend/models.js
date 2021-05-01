@@ -36,7 +36,7 @@ class ShareLink {
         this.imageid = imageid;
         this.creatorid = creatorid;
         this.limits = { temporal, visits };
-        this.state = { visits: 0 };
+        this.visits = 0;
     }
 }
 

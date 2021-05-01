@@ -12,15 +12,22 @@ import { StyledSpinnerNext } from 'baseui/spinner';
 import Login from './login/login';
 import Dashboard from './dashboard/dashboard';
 import Image from './single-image/image';
+import Share from './share/share';
 import { checkAuthenticated } from './login/login.service';
 
 function App() {
     return (
         <div className="App">
+            <div>
+                <div id="global-logo">Repository</div>
+            </div>
             <Router>
                 <Switch>
                     <ProtectedRoute path="/dashboard" Component={Dashboard} />
                     <ProtectedRoute path="/img" Component={Image} />
+                    <Route path="/share/:id">
+                        <Share />
+                    </Route>
                     <Route path="/">
                         <Login />
                     </Route>

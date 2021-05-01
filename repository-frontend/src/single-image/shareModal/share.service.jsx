@@ -21,3 +21,6 @@ export const createLink = (
         }
     );
 };
+export const getImageFromLinkURL = (linkId) => {
+    return `${url}/share/${linkId}`;
+};

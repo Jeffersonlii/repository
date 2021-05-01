@@ -66,10 +66,6 @@ function Dashboard() {
                 >
                     <RefreshIcon />
                 </Button>
-                <div style={{ 'flex-grow': 999 }}></div>
-                <div>
-                    <div id="global-logo">Repository</div>
-                </div>
             </header>
             <div id="gallery">
                 <Masonry

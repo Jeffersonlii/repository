@@ -4,13 +4,13 @@ import { Input, SIZE } from 'baseui/input';
 import { Button } from 'baseui/button';
 import { loginUser, registerUser } from './login.service';
 import { useHistory } from 'react-router-dom';
-
+import { ListItem, ListItemLabel } from 'baseui/list';
+import { Check } from 'baseui/icon';
 function Login() {
     const history = useHistory();
 
     return (
         <div className="login-host">
-            <div id="global-logo">Repository</div>
             <Formik
                 initialValues={{
                     username: '',
@@ -95,6 +95,25 @@ function Login() {
                         >
                             Register
                         </Button>
+
+                        <div class="text">
+                            {[
+                                '100% Free',
+                                '20 MB max image size',
+                                'Security First',
+                                'Customizable Sharing',
+                            ].map((str) => {
+                                return (
+                                    <ListItem
+                                        artwork={(props) => (
+                                            <Check {...props} />
+                                        )}
+                                    >
+                                        <ListItemLabel>{str}</ListItemLabel>
+                                    </ListItem>
+                                );
+                            })}
+                        </div>
                     </form>
                 )}
             </Formik>
