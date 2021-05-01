@@ -19,5 +19,5 @@ export const getImageIds = (images) => {
     });
 };
 export const getImageURL = (image) => {
-    return `${url}/image/${image._id}`;
+    return `${url}/image/${image?._id}`;
 };

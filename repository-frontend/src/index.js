@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Client as Styletron } from 'styletron-engine-atomic';
-import { LightTheme, DarkTheme, BaseProvider, styled } from 'baseui';
+import { LightTheme, BaseProvider } from 'baseui';
 import { Provider as StyletronProvider } from 'styletron-react';
 
 const engine = new Styletron();

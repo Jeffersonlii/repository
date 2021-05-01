@@ -4,23 +4,27 @@ import './masonry.scss';
 import { Button } from 'baseui/button';
 import Upload from 'baseui/icon/upload';
 import ArrowLeft from 'baseui/icon/arrow-left';
-import ChevronDown from 'baseui/icon/chevron-down';
 import { logoutUser } from '../login/login.service';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import UploadModal from './uploadModal/uploadModal';
 import { getImageIds, getImageURL } from './dashboard.service';
 import Masonry from 'react-masonry-css';
 import { Pagination } from 'baseui/pagination';
 import { Spinner } from 'baseui/spinner';
-
+import RefreshIcon from '@material-ui/icons/Refresh';
 function Dashboard() {
-    const [isOpen, setIsOpen] = useState(false);
+    const query = new URLSearchParams(useLocation().search);
+
+    const [isUploadOpen, setIsUploadOpen] = useState(false);
+
     const [galleryImages, setGalleryImages] = useState([]);
 
     const pageSize = 10;
     const numPages = Math.ceil(galleryImages.length / pageSize);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(
+        query.get('page') !== null ? parseInt(query.get('page')) : 1
+    );
     const [imagesLoaded, setImagesLoaded] = useState(0);
 
     const history = useHistory();
@@ -48,7 +52,7 @@ function Dashboard() {
                 </Button>
                 <Button
                     onClick={() => {
-                        setIsOpen(true);
+                        setIsUploadOpen(true);
                     }}
                 >
                     <Upload />
@@ -58,13 +62,8 @@ function Dashboard() {
                         refreshGallery();
                     }}
                 >
-                    <ChevronDown />
+                    <RefreshIcon />
                 </Button>
-
-                <UploadModal
-                    openState={{ isOpen, setIsOpen }}
-                    onFinishedUpload={refreshGallery}
-                ></UploadModal>
                 <div style={{ 'flex-grow': 999 }}></div>
                 <div>
                     <div id="global-logo">Repository</div>
@@ -88,15 +87,22 @@ function Dashboard() {
                         )
                         .map((image) => {
                             return (
-                                <img
-                                    key={image._id}
-                                    className="image"
-                                    onLoad={() => {
-                                        setImagesLoaded(imagesLoaded + 1);
-                                    }}
-                                    src={getImageURL(image)}
-                                    alt=""
-                                ></img>
+                                <div class="img-parent">
+                                    <img
+                                        key={image._id}
+                                        className="image"
+                                        onLoad={() => {
+                                            setImagesLoaded(imagesLoaded + 1);
+                                        }}
+                                        onClick={() => {
+                                            history.push(
+                                                `/img/?id=${image._id}`
+                                            );
+                                        }}
+                                        src={getImageURL(image)}
+                                        alt=""
+                                    ></img>
+                                </div>
                             );
                         })}
                 </Masonry>
@@ -112,14 +118,23 @@ function Dashboard() {
                 <Pagination
                     numPages={numPages}
                     currentPage={currentPage}
-                    onPageChange={({ nextPage }) => {
+                    onPageChange={({ nextPage, prevPage }) => {
+                        console.log(nextPage, prevPage);
+                        let newpage = Math.min(Math.max(nextPage, 1), numPages);
+                        history.push(`/dashboard?page=${newpage}`);
+
                         setImagesLoaded(0);
-                        setCurrentPage(
-                            Math.min(Math.max(nextPage, 1), numPages)
-                        );
+                        setCurrentPage(newpage);
                     }}
                 />
             </div>
+
+            {/* modals */}
+            <UploadModal
+                isOpen={isUploadOpen}
+                setIsOpen={setIsUploadOpen}
+                onFinishedUpload={refreshGallery}
+            ></UploadModal>
         </div>
     );
 }

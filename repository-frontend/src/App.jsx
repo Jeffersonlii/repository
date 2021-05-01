@@ -11,6 +11,7 @@ import { Spinner } from 'baseui/spinner';
 
 import Login from './login/login';
 import Dashboard from './dashboard/dashboard';
+import Image from './single-image/image';
 import { checkAuthenticated } from './login/login.service';
 
 function App() {
@@ -18,11 +19,8 @@ function App() {
         <div className="App">
             <Router>
                 <Switch>
-                    <ProtectedRoute
-                        path="/dashboard"
-                        Component={Dashboard}
-                    ></ProtectedRoute>
-                    <Route path="/img">img </Route>
+                    <ProtectedRoute path="/dashboard" Component={Dashboard} />
+                    <ProtectedRoute path="/img" Component={Image} />
                     <Route path="/">
                         <Login />
                     </Route>

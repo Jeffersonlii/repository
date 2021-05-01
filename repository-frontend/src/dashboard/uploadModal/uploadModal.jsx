@@ -20,9 +20,9 @@ function UploadModal(props) {
 
     return (
         <Modal
-            onClose={() => props.openState.setIsOpen(false)}
+            onClose={() => props.setIsOpen(false)}
             closeable
-            isOpen={props.openState.isOpen}
+            isOpen={props.isOpen}
             animate
             autoFocus
             size={SIZE.default}
@@ -82,7 +82,7 @@ function UploadModal(props) {
                 <ModalButton
                     kind={ButtonKind.tertiary}
                     onClick={() => {
-                        props.openState.setIsOpen(false);
+                        props.setIsOpen(false);
                     }}
                 >
                     Cancel
@@ -92,7 +92,8 @@ function UploadModal(props) {
                     onClick={() => {
                         uploadImages(filesToUpload).then(() => {
                             props.onFinishedUpload();
-                            props.openState.setIsOpen(false);
+                            setFilesToUpload([]);
+                            props.setIsOpen(false);
                         });
                     }}
                 >
