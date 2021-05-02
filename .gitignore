@@ -1,5 +1,4 @@
 
 repository-backend/node_modules/
-repository-backend/uploads/
-repository-backend/db/
-repository-backend/uploads/09e23e0da354716fac8decbd3d4bdb2b
+repository-backend/uploads/*
+repository-backend/db/*
