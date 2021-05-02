@@ -1,4 +1,5 @@
 const request = require('supertest');
+const cookieParser = require('cookie-parser');
 
 let Datastore = require('nedb'),
     Images = new Datastore({
@@ -15,32 +16,33 @@ let Datastore = require('nedb'),
         autoload: true,
     });
 const app = require('express')();
+// app.use(cookieParser());
 require('../app').endpoints(app, {
     Images,
     Users,
     Sharelink,
 });
 
-let clearAllDB = () => {
-    Images.remove({}, { multi: true }, function (err, numRemoved) {
+let clearAllDB = async () => {
+    await Images.remove({}, { multi: true }, function (err, numRemoved) {
         Images.loadDatabase(function (err) {
             // done
         });
     });
-    Users.remove({}, { multi: true }, function (err, numRemoved) {
+    await Users.remove({}, { multi: true }, function (err, numRemoved) {
         Users.loadDatabase(function (err) {
             // done
         });
     });
-    Sharelink.remove({}, { multi: true }, function (err, numRemoved) {
+    await Sharelink.remove({}, { multi: true }, function (err, numRemoved) {
         Sharelink.loadDatabase(function (err) {
             // done
         });
     });
 };
 describe('Test POST /api/register/', () => {
-    beforeEach((done) => {
-        clearAllDB();
+    beforeEach(async (done) => {
+        await clearAllDB();
         done();
     });
 
@@ -85,8 +87,8 @@ describe('Test POST /api/register/', () => {
     });
 });
 describe('Test POST /api/login/', () => {
-    beforeEach((done) => {
-        clearAllDB();
+    beforeEach(async (done) => {
+        await clearAllDB();
         done();
     });
 
@@ -126,33 +128,88 @@ describe('Test POST /api/login/', () => {
                     })
                     .then((response) => {
                         expect(response.statusCode).toBe(200);
+
                         done();
                     });
             });
     });
 });
-// describe('Test GET /api/logoff/', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
-// describe('Test GET /api/getSessionId/', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
+describe('Test GET /api/logoff/', () => {
+    let cookie;
+
+    beforeEach(async (done) => {
+        await clearAllDB();
+
+        await request(app).post('/api/register/').send({
+            username: 'bob',
+            password: '12345678',
+        });
+
+        cookie = (
+            await request(app).post('/api/login/').send({
+                username: 'bob',
+                password: '12345678',
+            })
+        ).headers['set-cookie'];
+        done();
+    });
+
+    test('logout', async (done) => {
+        expect(
+            (await request(app).get('/api/getSessionId/').set('cookie', cookie))
+                .body.userid !== undefined
+        ).toBe(true);
+
+        expect(
+            (await request(app).get('/api/logoff/').set('cookie', cookie))
+                .statusCode
+        ).toBe(200);
+        expect(
+            (await request(app).get('/api/getSessionId/').set('cookie', cookie))
+                .body.userid === undefined
+        ).toBe(true);
+        done();
+    });
+});
+describe('Test GET /api/getSessionId/', () => {
+    beforeEach((done) => {
+        clearAllDB();
+        done();
+    });
+
+    test('get existing id', async (done) => {
+        await request(app).post('/api/register/').send({
+            username: 'bob',
+            password: '12345678',
+        });
+
+        expect(
+            (
+                await request(app)
+                    .get('/api/getSessionId/')
+                    .set(
+                        'cookie',
+                        //login request
+                        //we need to attach the cookie manually
+                        (
+                            await request(app).post('/api/login/').send({
+                                username: 'bob',
+                                password: '12345678',
+                            })
+                        ).headers['set-cookie']
+                    )
+            ).body.userid !== undefined
+        ).toBe(true);
+        done();
+    });
+    test('get non existing id', async (done) => {
+        expect(
+            (await request(app).get('/api/getSessionId/')).body.userid ===
+                undefined
+        ).toBe(true);
+        done();
+    });
+});
 // describe('Test POST /api/image/', () => {
 //     test('It should response the GET method', (done) => {
 //         console.log(123);
@@ -209,7 +266,16 @@ describe('Test POST /api/login/', () => {
 //     });
 // });
 // describe('Test GET /api/share/:id', () => {
-//     test('It should response the GET method', (done) => {
+//         test('invalid link', (done) => {
+//             request(app)
+//                 .get('/')
+//                 .then((response) => {
+//                     expect(response.statusCode).toBe(200);
+//                     done();
+//                 });
+//         });
+
+//     test('valid link', (done) => {
 //         console.log(123);
 //         request(app)
 //             .get('/')

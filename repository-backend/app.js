@@ -123,11 +123,11 @@ exports.endpoints = (app, db) => {
 
     app.get('/api/logoff/', function (req, res, next) {
         req.session.userid = undefined;
-        return res.status(200).send({ success: true });
+        return res.status(200).json({ success: true });
     });
 
     app.get('/api/getSessionId/', function (req, res, next) {
-        return res.status(200).send({ userid: req.session.userid });
+        return res.status(200).json({ userid: req.session.userid });
     });
 
     /////////////////////////////////// IMAGES //////////////////////////////////////
