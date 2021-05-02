@@ -71,7 +71,7 @@ exports.endpoints = (app, db) => {
                         ],
                     });
                 } else {
-                    db.Images.insert(
+                    db.Users.insert(
                         new models.User(
                             {
                                 username: req.body.username,
@@ -95,7 +95,7 @@ exports.endpoints = (app, db) => {
         }
     );
     app.post('/api/login/', function (req, res, next) {
-        db.Images.findOne({ username: req.body.username }, (e, p) => {
+        db.Users.findOne({ username: req.body.username }, (e, p) => {
             let errorObj = {
                 errors: [
                     {
