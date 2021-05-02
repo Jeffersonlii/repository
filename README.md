@@ -5,6 +5,6 @@ todo
 - [x] gallery view
 - [x] share img functionality
 - [x] backend sql injection and cookie security
-- [ ] frontend notifs
+- [x] frontend notifs (toast)
 - [x] registration requirements
 - [ ] backend api testing
