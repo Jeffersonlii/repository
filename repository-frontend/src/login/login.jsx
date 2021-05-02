@@ -6,6 +6,7 @@ import { loginUser, registerUser } from './login.service';
 import { useHistory } from 'react-router-dom';
 import { ListItem, ListItemLabel } from 'baseui/list';
 import { Check } from 'baseui/icon';
+import { notifyResponse } from '../toast/toast.service';
 function Login() {
     const history = useHistory();
 
@@ -25,17 +26,25 @@ function Login() {
                             loginUser({
                                 username: values.username,
                                 password: values.password,
-                            }).then(() => {
-                                history.push('/dashboard');
-                            });
+                            })
+                                .then(() => {
+                                    history.push('/dashboard');
+                                })
+                                .catch((e) => {
+                                    notifyResponse(e.response);
+                                });
                             break;
                         case 'registration':
                             registerUser({
                                 username: values.username,
                                 password: values.password,
-                            }).then(() => {
-                                history.push('/dashboard');
-                            });
+                            })
+                                .then(() => {
+                                    history.push('/dashboard');
+                                })
+                                .catch((e) => {
+                                    notifyResponse(e.response);
+                                });
                             break;
                         default:
                     }

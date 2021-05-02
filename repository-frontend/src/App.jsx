@@ -14,7 +14,7 @@ import Dashboard from './dashboard/dashboard';
 import Image from './single-image/image';
 import Share from './share/share';
 import { checkAuthenticated } from './login/login.service';
-
+import Toast from './toast/toast';
 function App() {
     return (
         <div className="App">
@@ -33,6 +33,8 @@ function App() {
                     </Route>
                 </Switch>
             </Router>
+
+            <Toast />
         </div>
     );
 }

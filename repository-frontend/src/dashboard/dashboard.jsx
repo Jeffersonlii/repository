@@ -13,6 +13,8 @@ import Masonry from 'react-masonry-css';
 import { Pagination } from 'baseui/pagination';
 import { StyledSpinnerNext } from 'baseui/spinner';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { notifyResponse } from '../toast/toast.service';
+
 function Dashboard() {
     const query = new URLSearchParams(useLocation().search);
 
@@ -32,9 +34,14 @@ function Dashboard() {
     let refreshGallery = () => {
         setGalleryImages([]);
         setImagesLoaded(0);
-        getImageIds().then((resp) => {
-            setGalleryImages(resp.data.images);
-        });
+        getImageIds()
+            .then((resp) => {
+                setGalleryImages(resp.data.images);
+                notifyResponse(resp);
+            })
+            .catch((e) => {
+                notifyResponse(e.response);
+            });
     };
     useEffect(() => {
         refreshGallery(); //init gallery

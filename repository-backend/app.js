@@ -74,11 +74,12 @@ app.post(
     '/api/register/',
     body('username')
         .isAlphanumeric()
+        .withMessage('Username must be alphanumeric')
         .not()
         .isEmpty()
+        .withMessage('Username be non nonempty')
         .trim()
-        .escape()
-        .withMessage('Username be alphanumeric and nonempty'),
+        .escape(),
     body('password')
         .isLength({ min: 8 })
         .withMessage('Password must be at least 8 characters long'),
@@ -86,9 +87,13 @@ app.post(
     function (req, res, next) {
         Users.findOne({ username: req.body.username }, (e, p) => {
             if (p !== null) {
-                res.status(409).end(
-                    'User name: ' + req.body.username + ' is taken'
-                );
+                res.status(409).json({
+                    errors: [
+                        {
+                            msg: `User name: ${req.body.username}  is taken`,
+                        },
+                    ],
+                });
             } else {
                 Users.insert(
                     new models.User(
@@ -113,8 +118,16 @@ app.post(
 );
 app.post('/api/login/', function (req, res, next) {
     Users.findOne({ username: req.body.username }, (e, p) => {
+        let errorObj = {
+            errors: [
+                {
+                    msg: 'Invalid Credentials',
+                },
+            ],
+        };
+
         if (p === null) {
-            res.status(401).end('access denied');
+            res.status(401).json(errorObj);
         } else {
             let userobj = new models.User({
                 username: p.username,
@@ -124,7 +137,7 @@ app.post('/api/login/', function (req, res, next) {
                 req.session.userid = p._id;
                 return res.status(200).send(p);
             } else {
-                return res.status(401).end('access denied');
+                return res.status(401).json(errorObj);
             }
         }
     });
@@ -168,16 +181,25 @@ app.post(
 );
 //get all images ids for the logged in user
 app.get('/api/image/', isAuthenticated, function (req, res, next) {
+    let errorObj = {
+        errors: [
+            {
+                msg: 'Failed to fetch images',
+            },
+        ],
+    };
+
     let owner = req.userid;
     Images.find({ uploaderid: owner })
         .sort({ createdAt: 1 })
         .projection({ path: -1, mimetype: -1, updatedAt: -1 })
         .exec(function (err, data) {
             if (err) {
-                res.status(400).json('Something went Wrong.');
+                res.status(400).json(errorObj);
             } else {
                 res.json({
                     images: data.reverse(),
+                    msgs: ['Images Fetched'],
                 });
             }
         });
@@ -285,14 +307,14 @@ app.get(
     validate,
     function (req, res, next) {
         Sharelink.findOne({ _id: req.params.id }, (e, p) => {
-            console.log(p);
-
-            if (e) {
+            if (e || !p) {
                 return res.status(409).end('Something went wrong');
             }
             let maxVisits = p.limits.visits;
             if (maxVisits) {
                 if (p.visits > maxVisits) {
+                    Sharelink.remove({ _id: p._id });
+
                     return res.status(401).end('Link is invalid/expired');
                 }
             }
@@ -300,6 +322,8 @@ app.get(
             if (temporalLimit) {
                 console.log(new Date() > new Date(temporalLimit));
                 if (new Date() > new Date(temporalLimit)) {
+                    Sharelink.remove({ _id: p._id });
+
                     return res.status(401).end('Link is invalid/expired');
                 }
             }

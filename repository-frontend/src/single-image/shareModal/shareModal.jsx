@@ -146,7 +146,7 @@ function TimeLimitLink(props) {
         );
     };
     useEffect(() => {
-        onChange(undefined, undefined);
+        onChange(new Date(), 'date');
     }, []);
     return (
         <>
