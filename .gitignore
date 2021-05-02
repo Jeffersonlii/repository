@@ -2,3 +2,4 @@
 repository-backend/node_modules/
 repository-backend/uploads/*
 repository-backend/db/*
+repository-backend/testdb/*
