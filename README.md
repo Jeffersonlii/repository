@@ -18,6 +18,9 @@ Account based Image Repository repository web app built using react and express,
   - Passwords are salted and hashed 
   - NoSQL injection sanitization on the backend  
   - Image fetching is protected by authentification
+- UI :
+  - Intuitive UI
+  - Helpful notifications   
 
 ### Get Started
 - clone the repo
