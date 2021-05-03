@@ -315,7 +315,7 @@ exports.endpoints = (app, db) => {
                 }
                 let maxVisits = p.limits.visits;
                 if (maxVisits) {
-                    if (p.visits > maxVisits) {
+                    if (p.visits >= maxVisits) {
                         db.Sharelink.remove({ _id: p._id });
 
                         return res.status(401).end('Link is invalid/expired');
