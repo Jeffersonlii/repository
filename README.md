@@ -34,7 +34,7 @@ Account based Image Repository repository web app built using react and express,
   - `http://localhost:3000/` 
 
 ### Testing
-- Backend endpoints are testing by Jest
+- Backend endpoints are tested by Jest
   - `cd repository-backend; npm run test`
 ### todo :
 - [x] user login and registration
