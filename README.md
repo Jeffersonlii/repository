@@ -27,6 +27,8 @@ Account based Image Repository repository web app built using react and express,
 - run the app
   -  `cd .\repository-backend\; npm run start; cd .. `
   -  `cd .\repository-frontend\; npm run start; cd .. `
+- view site
+  - `http://localhost:3000/` 
 
 ### Testing
 - Backend endpoints are testing by Jest
