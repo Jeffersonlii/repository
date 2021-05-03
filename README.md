@@ -16,7 +16,7 @@ Account based Image Repository repository web app built using react and express,
 - security:
   - Session based authentification
   - Passwords are salted and hashed 
-  - NoSQL injection sanitization on the backend  
+  - NoSQL injection sanitization
   - Image fetching is protected by authentification
 - UI :
   - Intuitive UI
