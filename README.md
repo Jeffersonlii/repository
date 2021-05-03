@@ -17,6 +17,7 @@ Account based Image Repository repository web app built using react and express,
   - Session based authentification
   - Passwords are salted and hashed 
   - NoSQL injection sanitization on the backend  
+  - Image fetching is protected by authentification
 
 ### Get Started
 - clone the repo
@@ -25,7 +26,7 @@ Account based Image Repository repository web app built using react and express,
   - `cd .\repository-frontend\; npm i; cd .. `
 - run the app
   -  `cd .\repository-backend\; npm run start; cd .. `
-  -  ` cd .\repository-frontend\; npm run start; cd .. `
+  -  `cd .\repository-frontend\; npm run start; cd .. `
 
 ### Testing
 - Backend endpoints are testing by Jest
