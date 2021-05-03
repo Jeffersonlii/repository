@@ -24,12 +24,12 @@ Account based Image Repository repository web app built using react and express,
   - `cd .\repository-backend\; npm i; cd .. `
   - `cd .\repository-frontend\; npm i; cd .. `
 - run the app
-  -  `cd .\repository-backend\; npm start; cd .. `
-  -  ` cd .\repository-frontend\; npm start; cd .. `
+  -  `cd .\repository-backend\; npm run start; cd .. `
+  -  ` cd .\repository-frontend\; npm run start; cd .. `
 
 ### Testing
 - Backend endpoints are testing by Jest
-  - `cd repository-backend; npm test`
+  - `cd repository-backend; npm run test`
 ### todo :
 - [x] user login and registration
 - [x] secure frontend routing
