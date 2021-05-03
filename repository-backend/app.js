@@ -138,7 +138,28 @@ exports.endpoints = (app, db) => {
         isAuthenticated,
         upload.array('file'),
         function (req, res, next) {
-            db.Images.findOne({ _id: req.userid }, (e, p) => {
+            req.files.forEach((file) => {
+                if (!file.mimetype.includes('image')) {
+                    return res.status(400).json({
+                        errors: [
+                            {
+                                msg: `Only Images are allowed`,
+                            },
+                        ],
+                    });
+                }
+            });
+            db.Users.findOne({ _id: req.userid }, (e, p) => {
+                if (!p) {
+                    return res.status(404).json({
+                        errors: [
+                            {
+                                msg: `User doesn't exist`,
+                            },
+                        ],
+                    });
+                }
+
                 req.files.forEach((file) => {
                     db.Images.insert(
                         new models.Image({
@@ -175,9 +196,9 @@ exports.endpoints = (app, db) => {
             .projection({ path: -1, mimetype: -1, updatedAt: -1 })
             .exec(function (err, data) {
                 if (err) {
-                    res.status(400).json(errorObj);
+                    return res.status(400).json(errorObj);
                 } else {
-                    res.json({
+                    return res.json({
                         images: data.reverse(),
                         msgs: ['Images Fetched'],
                     });

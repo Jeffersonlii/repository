@@ -1,5 +1,4 @@
 const request = require('supertest');
-const cookieParser = require('cookie-parser');
 
 let Datastore = require('nedb'),
     Images = new Datastore({
@@ -16,6 +15,7 @@ let Datastore = require('nedb'),
         autoload: true,
     });
 const app = require('express')();
+
 // app.use(cookieParser());
 require('../app').endpoints(app, {
     Images,
@@ -210,78 +210,5 @@ describe('Test GET /api/getSessionId/', () => {
         done();
     });
 });
-// describe('Test POST /api/image/', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
-// describe('Test GET /api/image/', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
-// describe('Test GET /api/image/:id', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
-// describe('Test DELETE /api/image/:id', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
-// describe('Test POST /api/share/:id', () => {
-//     test('It should response the GET method', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
-// describe('Test GET /api/share/:id', () => {
-//         test('invalid link', (done) => {
-//             request(app)
-//                 .get('/')
-//                 .then((response) => {
-//                     expect(response.statusCode).toBe(200);
-//                     done();
-//                 });
-//         });
 
-//     test('valid link', (done) => {
-//         console.log(123);
-//         request(app)
-//             .get('/')
-//             .then((response) => {
-//                 expect(response.statusCode).toBe(200);
-//                 done();
-//             });
-//     });
-// });
+//ran out of time to test the rest of the endpoints :(
