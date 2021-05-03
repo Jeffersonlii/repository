@@ -20,7 +20,8 @@ Account based Image Repository repository web app built using react and express,
   - Image fetching is protected by authentification
 - UI :
   - Intuitive UI
-  - Helpful notifications   
+  - Helpful notifications
+  - pagination
 
 ### Get Started
 - clone the repo
