@@ -1,11 +1,9 @@
-# Shopify-Challenge-imagerepo
-
-Submission for https://docs.google.com/document/d/1ZKRywXQLZWOqVOHC4JkF3LqdpO3Llpfk_CkZPR8bjak/edit
+# repository
 
 Video Showcase : https://youtu.be/2ZpIDB_Jfdg
 
 ### Description : 
-Account based Image Repository repository web app built using react and express, with NEDB database
+Account based Image storage and sharing web app built using react and express, with NEDB database
 
 ### Features : 
 - bulk add images
